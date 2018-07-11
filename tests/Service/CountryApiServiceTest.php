@@ -2,7 +2,7 @@
 
 namespace App\Tests\Service;
 
-use App\Service\CountryApiService;
+use App\Service\Api\CountryApiService;
 use GuzzleHttp\Exception\ClientException;
 use PHPUnit\Framework\TestCase;
 

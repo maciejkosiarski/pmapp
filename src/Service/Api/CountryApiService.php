@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Api;
 
+use App\Service\ApiService;
 use App\Utils\Decodable;
 
 /**

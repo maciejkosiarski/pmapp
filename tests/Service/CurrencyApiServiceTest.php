@@ -2,7 +2,7 @@
 
 namespace App\Tests\Service;
 
-use App\Service\CurrencyApiService;
+use App\Service\Api\CurrencyApiService;
 use PHPUnit\Framework\TestCase;
 
 /**

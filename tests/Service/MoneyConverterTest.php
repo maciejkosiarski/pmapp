@@ -3,7 +3,7 @@
 namespace App\Tests\Service;
 
 use App\Exception\CurrenciesQuotesException;
-use App\Service\MoneyConverter;
+use App\Utils\MoneyConverter;
 use PHPUnit\Framework\TestCase;
 
 /**

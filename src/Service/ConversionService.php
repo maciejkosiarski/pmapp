@@ -7,6 +7,9 @@ use App\Event\MoneyConvertedEvent;
 use App\Exception\CountryApiException;
 use App\Exception\CurrencyApiException;
 use App\Exception\InputDataToConvertException;
+use App\Service\Api\CountryApiService;
+use App\Service\Api\CurrencyApiService;
+use App\Utils\MoneyConverter;
 use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

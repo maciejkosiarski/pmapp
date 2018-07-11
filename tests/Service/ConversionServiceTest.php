@@ -4,8 +4,8 @@ namespace App\Tests\Service;
 
 use App\Entity\Conversion;
 use App\Service\ConversionService;
-use App\Service\CountryApiService;
-use App\Service\CurrencyApiService;
+use App\Service\Api\CountryApiService;
+use App\Service\Api\CurrencyApiService;
 use Doctrine\ORM\EntityManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
