@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conversion index{% endblock %}
+
+{% block body %}
+
+    <h2>Conversion history</h2>
+
+    {{ include('alerts.html.twig') }}
+
+    <a href="{{ path('conversion_new') }}">convert money</a>
+    <br>
+    <br>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>CapitalCity</th>
+                <th>Money</th>
+                <th>Converted</th>
+                <th>Currency rate</th>
+                <th>CreatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for conversion in conversions %}
+            <tr>
+                <td>{{ conversion.capitalCity }}</td>
+                <td>{{ conversion.money }} PLN</td>
+                <td>{{ conversion.converted |round(2, 'ceil')}} {{ conversion.currency }}</td>
+                <td>{{ (conversion.converted / conversion.money) |round(6, 'ceil') }}</td>
+                <td>{{ conversion.createdAt ? conversion.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    {{ include('conversion/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

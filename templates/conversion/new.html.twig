@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conversion index{% endblock %}
+
+{% block body %}
+
+    <h1>Create new Conversion</h1>
+    <hr>
+
+    {{ include('alerts.html.twig') }}
+
+    <a href="{{ path('conversion_index') }}">history</a>
+    <br>
+    <br>
+
+    {{ include('conversion/_form.html.twig') }}
+
+{% endblock %}
