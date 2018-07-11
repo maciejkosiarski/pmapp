@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class Conversion
  * @package App\Entity
  * @ORM\Table(name="conversions")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\ConversionRepository")
  * @ORM\HasLifecycleCallbacks()
  * @author  Maciej Kosiarski <maciek.kosiarski@gmail.com>
  */

@@ -8,6 +8,7 @@ use App\Exception\CurrencyApiException;
 use App\Exception\CurrenciesQuotesException;
 use App\Exception\InputDataToConvertException;
 use App\Form\ConversionType;
+use App\Repository\ConversionRepository;
 use App\Service\ConversionService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,13 +24,12 @@ class AppController extends Controller
 {
 	/**
 	 * @Route("/", name="conversion_index", methods="GET")
+	 * @param ConversionRepository $repository
 	 * @return Response
 	 */
-	public function index(): Response
+	public function index(ConversionRepository $repository): Response
 	{
-		return $this->render('conversion/index.html.twig', [
-			'conversions' => $this->getDoctrine()->getRepository(Conversion::class)->findAll(),
-		]);
+		return $this->render('conversion/index.html.twig', ['conversions' => $repository->findAll()]);
 	}
 
 	/**
