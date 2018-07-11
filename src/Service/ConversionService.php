@@ -3,12 +3,12 @@
 namespace App\Service;
 
 use App\Entity\Conversion;
+use App\Event\MoneyConvertedEvent;
 use App\Exception\CountryApiException;
 use App\Exception\CurrencyApiException;
 use App\Exception\InputDataToConvertException;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Exception\GuzzleException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class ConversionService
@@ -28,18 +28,18 @@ class ConversionService
 	private $currencyApi;
 
 	/**
-	 * @var EntityManager
+	 * @var EventDispatcherInterface
 	 */
-	private $em;
+	private $dispatcher;
 
 	public function __construct(
 		CountryApiService $countryApi,
 		CurrencyApiService $currencyApi,
-		EntityManagerInterface $em
+		EventDispatcherInterface $dispatcher
 	){
 		$this->countryApi  = $countryApi;
 		$this->currencyApi = $currencyApi;
-		$this->em          = $em;
+		$this->dispatcher  = $dispatcher;
 	}
 
 	/**
@@ -50,8 +50,6 @@ class ConversionService
 	 * @throws GuzzleException
 	 * @throws InputDataToConvertException
 	 * @throws \App\Exception\CurrenciesQuotesException
-	 * @throws \Doctrine\ORM\ORMException
-	 * @throws \Doctrine\ORM\OptimisticLockException
 	 */
 	public function convert(array $data): Conversion
 	{
@@ -64,24 +62,21 @@ class ConversionService
 		};
 
 		foreach ($this->getCountryCurrenciesByCity($data['capitalCity']) as $currency) {
-			$currenciesRates = $this->currencyApi->getUSDRates([
-				Conversion::BASE_CURRENCY,
-				$currency['code'],
-			]);
+			$currenciesRates = $this->currencyApi->getUSDRates([Conversion::BASE_CURRENCY, $currency['code']]);
 
-			if(!$currenciesRates['success']) {
+			if (!$currenciesRates['success']) {
 				throw new CurrencyApiException($currenciesRates['code']);
 			}
 
-			$conversion = $this->setConversionEntity(
-				$data['capitalCity'],
-				$data['money'],
-				$currency['code'],
+			$conversion = new Conversion();
+			$conversion->setCapitalCity($data['capitalCity']);
+			$conversion->setMoney($data['money']);
+			$conversion->setCurrency($currency['code']);
+			$conversion->setConverted(
 				$this->convertMoney($currenciesRates['quotes'], $data['money'], $currency['code'])
 			);
 
-			$this->em->persist($conversion);
-			$this->em->flush();
+			$this->dispatchConvertedEvent($conversion);
 
 			return $conversion;
 		}
@@ -100,25 +95,7 @@ class ConversionService
 	{
 		$converter = new MoneyConverter($convertTo);
 
-		return	$converter->convert($currenciesQuotes, $money);
-	}
-
-	/**
-	 * @param string $capitalCity
-	 * @param int    $money
-	 * @param string $currency
-	 * @param float  $converted
-	 * @return Conversion
-	 */
-	private function setConversionEntity(string $capitalCity, int $money, string $currency, float $converted): Conversion
-	{
-		$conversion = new Conversion();
-		$conversion->setCapitalCity($capitalCity);
-		$conversion->setMoney($money);
-		$conversion->setCurrency($currency);
-		$conversion->setConverted($converted);
-
-		return $conversion;
+		return $converter->convert($currenciesQuotes, $money);
 	}
 
 	/**
@@ -128,9 +105,9 @@ class ConversionService
 	 */
 	private function cityIsValid(string $city): bool
 	{
-		return in_array($city, array_filter(array_map(function($country) {
+		return in_array($city, array_filter(array_map(function ($country) {
 			return $country['capital'];
-		},$this->countryApi->findAll())));
+		}, $this->countryApi->findAll())));
 	}
 
 	/**
@@ -151,5 +128,13 @@ class ConversionService
 		} catch (GuzzleException $e) {
 			throw new CountryApiException($city);
 		}
+	}
+
+	private function dispatchConvertedEvent(Conversion $conversion): void
+	{
+		$this->dispatcher->dispatch(
+			MoneyConvertedEvent::NAME,
+			new MoneyConvertedEvent($conversion)
+		);
 	}
 }
