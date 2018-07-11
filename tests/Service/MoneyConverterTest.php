@@ -36,7 +36,6 @@ class MoneyConverterTest extends TestCase
 	}
 
 
-
 	/**
 	 * @return array
 	 */
@@ -68,20 +67,20 @@ class MoneyConverterTest extends TestCase
 	{
 		return [
 			[
-				'USD'   => 3.5,
-				'USDGBP'   => 0.7,
+				'USD'    => 3.5,
+				'USDGBP' => 0.7,
 			],
 			[
-				'USDPLN'   => 4,
-				'USD'   => 2,
+				'USDPLN' => 4,
+				'USD'    => 2,
 			],
 			[
-				'USDPLN'   => 'abc',
-				'USDGBP'   => 1.5,
+				'USDPLN' => 'abc',
+				'USDGBP' => 1.5,
 			],
 			[
-				'USDPLN'   => 2,
-				'USDGBP'   => 'abc',
+				'USDPLN' => 2,
+				'USDGBP' => 'abc',
 			],
 		];
 	}

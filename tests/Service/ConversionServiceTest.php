@@ -46,16 +46,6 @@ class ConversionServiceTest extends TestCase
 	/**
 	 * @return \PHPUnit\Framework\MockObject\MockObject
 	 */
-	private function getEntityManagerMock(): MockObject
-	{
-		return $this->getMockBuilder(EntityManager::class)
-			->disableOriginalConstructor()
-			->getMock();
-	}
-
-	/**
-	 * @return \PHPUnit\Framework\MockObject\MockObject
-	 */
 	private function getDispatcherMock(): MockObject
 	{
 		return $this->getMockBuilder(EventDispatcher::class)
