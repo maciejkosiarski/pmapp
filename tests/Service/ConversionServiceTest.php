@@ -6,8 +6,10 @@ use App\Entity\Conversion;
 use App\Service\ConversionService;
 use App\Service\CountryApiService;
 use App\Service\CurrencyApiService;
+use Doctrine\ORM\EntityManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * Class ConversionServiceTest
@@ -28,7 +30,7 @@ class ConversionServiceTest extends TestCase
 		$conversionService = new ConversionService(
 			$this->getCountryApiMock(),
 			$this->getCurrencyApiMock(),
-			$this->getEntityManagerMock()
+			$this->getDispatcherMock()
 		);
 
 		$result = $conversionService->convert(['capitalCity' => 'London', 'money' => 1000]);
@@ -46,7 +48,17 @@ class ConversionServiceTest extends TestCase
 	 */
 	private function getEntityManagerMock(): MockObject
 	{
-		return $this->getMockBuilder('Doctrine\ORM\EntityManager')
+		return $this->getMockBuilder(EntityManager::class)
+			->disableOriginalConstructor()
+			->getMock();
+	}
+
+	/**
+	 * @return \PHPUnit\Framework\MockObject\MockObject
+	 */
+	private function getDispatcherMock(): MockObject
+	{
+		return $this->getMockBuilder(EventDispatcher::class)
 			->disableOriginalConstructor()
 			->getMock();
 	}
