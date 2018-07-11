@@ -7,7 +7,7 @@ namespace App\Exception;
  * @package App\Exception
  * @author  Maciej Kosiarski <maciek.kosiarski@gmail.com>
  */
-class CurrenciesQuotesException extends \Exception
+class CurrenciesQuotesException extends ConvertException
 {
 	public function __construct(string $message = 'Currencies quotes error ;-(.', int $code = 400)
 	{

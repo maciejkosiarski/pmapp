@@ -3,10 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Conversion;
-use App\Exception\CountryApiException;
-use App\Exception\CurrencyApiException;
-use App\Exception\CurrenciesQuotesException;
-use App\Exception\InputDataToConvertException;
+use App\Exception\ConvertException;
 use App\Form\ConversionType;
 use App\Repository\ConversionRepository;
 use App\Service\ConversionService;
@@ -49,22 +46,9 @@ class AppController extends Controller
 			if($form->isSubmitted() && $form->isValid()) {
 				$conversion = $conversionService->convert($request->get('conversion'));
 
-				$this->addFlash('success',
-					sprintf(
-						'Money converted successfully. In %s you will have %u %s',
-						$conversion->getCapitalCity(),
-						$conversion->getConverted(),
-						$conversion->getCurrency()
-					)
-				);
+				$this->addFlash('success', $conversion->successMessage());
 			}
-		} catch (InputDataToConvertException $e) {
-			$this->addFlash('warning', $e->getMessage());
-		} catch (CountryApiException $e) {
-			$this->addFlash('warning', $e->getMessage());
-		} catch (CurrencyApiException $e) {
-			$this->addFlash('warning', $e->getMessage());
-		} catch (CurrenciesQuotesException $e) {
+		} catch (ConvertException $e) {
 			$this->addFlash('warning', $e->getMessage());
 		} catch (\Exception $e) {
 			$this->addFlash('warning', 'We have problems, please try again later');

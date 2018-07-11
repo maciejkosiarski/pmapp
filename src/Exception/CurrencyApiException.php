@@ -7,7 +7,7 @@ namespace App\Exception;
  * @package App\Exception
  * @author  Maciej Kosiarski <maciek.kosiarski@gmail.com>
  */
-class CurrencyApiException extends \Exception
+class CurrencyApiException extends ConvertException
 {
 	public function __construct(int $code = 0, string $message = 'We do not have access to current currencies. Please try again later.')
 	{

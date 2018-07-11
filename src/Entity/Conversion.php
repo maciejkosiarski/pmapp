@@ -115,4 +115,14 @@ class Conversion extends BaseEntity
 	{
 		$this->converted = $converted;
 	}
+
+	public function successMessage()
+	{
+		return sprintf(
+			'Money converted successfully. In %s you will have %u %s',
+			$this->capitalCity,
+			$this->converted,
+			$this->currency
+		);
+	}
 }

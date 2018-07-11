@@ -7,7 +7,7 @@ namespace App\Exception;
  * @package App\Exception
  * @author  Maciej Kosiarski <maciek.kosiarski@gmail.com>
  */
-class InputDataToConvertException extends \Exception
+class InputDataToConvertException extends ConvertException
 {
 	public function __construct(string $message = 'Data to convert was invalid.', int $code = 400)
 	{

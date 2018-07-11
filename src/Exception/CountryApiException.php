@@ -7,7 +7,7 @@ namespace App\Exception;
  * @package App\Exception
  * @author  Maciej Kosiarski <maciek.kosiarski@gmail.com>
  */
-class CountryApiException extends \Exception
+class CountryApiException extends ConvertException
 {
 	public function __construct(string $city)
 	{
